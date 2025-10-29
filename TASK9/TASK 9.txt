@@ -1,0 +1,60 @@
+// Create Cricket Boards
+CREATE (:CricketBoard {BoardID:'BID01', Name:'Tamil Nadu Cricket Board', Address:'Chennai', Contact_No:'9876543210'}),
+       (:CricketBoard {BoardID:'BID02', Name:'Karnataka Cricket Board', Address:'Bangalore', Contact_No:'9876500000'});
+
+// Create Teams
+CREATE (:Team {TeamID:'T01', Name:'Chennai Kings', Coach:'Sundar', Captain:'Arun'}),
+       (:Team {TeamID:'T02', Name:'Bangalore Warriors', Coach:'Vijay', Captain:'Ramesh'});
+
+// Create Players
+CREATE (:Player {PlayerID:'P01', FName:'Aswin', LName:'Murugan', Age:27, DateofBirth:'1998-01-19', PlayingRole:'Bowler'}),
+       (:Player {PlayerID:'P02', FName:'Suraj', LName:'Raj', Age:25, DateofBirth:'1999-02-10', PlayingRole:'Batsman'}),
+       (:Player {PlayerID:'P03', FName:'Anand', LName:'Kumar', Age:26, DateofBirth:'1998-01-19', PlayingRole:'All-Rounder'});
+
+
+// Connect Boards and Teams
+MATCH (b:CricketBoard {BoardID:'BID01'}), (t:Team {TeamID:'T01'})
+CREATE (b)-[:has]->(t);
+
+MATCH (b:CricketBoard {BoardID:'BID02'}), (t:Team {TeamID:'T02'})
+CREATE (b)-[:has]->(t);
+
+// Connect Teams and Players
+MATCH (t:Team {TeamID:'T01'}), (p:Player {PlayerID:'P01'})
+CREATE (t)-[:hasPlayer]->(p);
+
+MATCH (t:Team {TeamID:'T01'}), (p:Player {PlayerID:'P02'})
+CREATE (t)-[:hasPlayer]->(p);
+
+MATCH (t:Team {TeamID:'T02'}), (p:Player {PlayerID:'P03'})
+CREATE (t)-[:hasPlayer]->(p);
+
+MATCH (p:Player) RETURN COUNT(p) AS TotalPlayers;
+
+output: 3
+
+MATCH (p:Player {DateofBirth:'1998-01-19'})
+RETURN p.PlayerID, p.FName, p.LName;
+
+"P01"   "Aswin"   "Murugan"
+
+"P03"    "Anand"   "Kumar"
+
+
+MATCH (b:CricketBoard {Address:'Chennai'})-[:has]->(:Team)-[:hasPlayer]->(p:Player)
+RETURN b.Name, p.FName, p.LName;
+
+1 "Tamil Nadu Cricket Board"  "Aswin"   "Murugan"
+2 "Tamil Nadu Cricket Board"  "Suraj"   "Raj"
+
+
+MATCH (b:CricketBoard {Address:'Chennai'})
+SET b.Name = 'Tamil Nadu Premier Board', b.Contact_No = '9999999999'
+RETURN b;
+
+MATCH (p:Player)
+WHERE NOT (p)-[:played_in]->(:Match)
+DELETE p;
+
+MATCH (b:CricketBoard {BoardID:'BID02'})
+DETACH DELETE b;
