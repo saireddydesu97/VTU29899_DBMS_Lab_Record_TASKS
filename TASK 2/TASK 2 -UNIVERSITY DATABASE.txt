@@ -1,0 +1,83 @@
+SQL> CREATE TABLE UniversityPerson (
+  2      PersonId INT PRIMARY KEY,
+  3      Name VARCHAR2(50) NOT NULL,
+  4      DOB DATE,
+  5      CONSTRAINT check_age CHECK (DOB <= SYSDATE - INTERVAL '17' YEAR)
+  6  );
+
+Table created.
+
+SQL> CREATE TABLE DeptDetails (
+  2      DeptId INT PRIMARY KEY,
+  3      DeptName VARCHAR2(20) NOT NULL
+  4  );
+
+Table created.
+
+SQL> CREATE TABLE UniversityStudent (
+  2      StudentId INT PRIMARY KEY,
+  3      PersonId INT UNIQUE NOT NULL,
+  4      Degree VARCHAR2(10) CHECK (Degree IN ('BE', 'ME', 'PHD')),
+  5      Batch DATE,
+  6      FOREIGN KEY (PersonId) REFERENCES UniversityPerson(PersonId)
+  7  );
+
+Table created.
+
+SQL> CREATE TABLE TeachingFaculty (
+  2      FacultyId INT PRIMARY KEY,
+  3      PersonId INT UNIQUE NOT NULL,
+  4      DeptId INT,
+  5      Position VARCHAR2(20),
+  6      FOREIGN KEY (PersonId) REFERENCES UniversityPerson(PersonId),
+  7      FOREIGN KEY (DeptId) REFERENCES DeptDetails(DeptId)
+  8  );
+
+Table created.
+
+SQL> CREATE TABLE CourseDetails (
+  2      CourseId INT PRIMARY KEY,
+  3      CourseName VARCHAR2(25),
+  4      Credits INT CHECK (Credits BETWEEN 1 AND 4),
+  5      DeptId INT,
+  6      FOREIGN KEY (DeptId) REFERENCES DeptDetails(DeptId)
+  7  );
+
+Table created.
+
+SQL> DESC UniversityPerson;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PERSONID                                  NOT NULL NUMBER(38)
+ NAME                                      NOT NULL VARCHAR2(50)
+ DOB                                                DATE
+
+SQL> DESC DeptDetails;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPTID                                    NOT NULL NUMBER(38)
+ DEPTNAME                                  NOT NULL VARCHAR2(20)
+
+SQL> DESC UniversityStudent;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STUDENTID                                 NOT NULL NUMBER(38)
+ PERSONID                                  NOT NULL NUMBER(38)
+ DEGREE                                             VARCHAR2(10)
+ BATCH                                              DATE
+
+SQL> DESC TeachingFaculty;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FACULTYID                                 NOT NULL NUMBER(38)
+ PERSONID                                  NOT NULL NUMBER(38)
+ DEPTID                                             NUMBER(38)
+ POSITION                                           VARCHAR2(20)
+
+SQL> DESC CourseDetails;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSEID                                  NOT NULL NUMBER(38)
+ COURSENAME                                         VARCHAR2(25)
+ CREDITS                                            NUMBER(38)
+ DEPTID                                             NUMBER(38)
