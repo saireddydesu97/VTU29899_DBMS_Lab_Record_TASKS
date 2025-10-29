@@ -1,0 +1,152 @@
+SQL> SET SERVEROUTPUT ON;
+
+SQL> ALTER TABLE player ADD TotalMatchesPlayed NUMBER(5) DEFAULT 0;
+
+Table altered.
+
+SQL> MERGE INTO player p
+  2  USING (
+  3      SELECT playerid, COUNT(matchid) as match_count
+  4      FROM player_match
+  5      GROUP BY playerid
+  6  ) pm
+  7  ON (p.playerid = pm.playerid)
+  8  WHEN MATCHED THEN
+  9      UPDATE SET p.TotalMatchesPlayed = pm.match_count;
+
+10 rows merged.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> CREATE OR REPLACE TRIGGER trg_UpdatePlayerMatchCount
+  2  AFTER INSERT ON player_match
+  3  FOR EACH ROW
+  4  BEGIN
+  5      UPDATE player
+  6      SET TotalMatchesPlayed = TotalMatchesPlayed + 1
+  7      WHERE playerid = :new.playerid;
+  8  END;
+  9  /
+
+Trigger created.
+
+SQL> INSERT INTO player_match VALUES ('p401', 'm405');
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT playerid, name, TotalMatchesPlayed FROM player WHERE playerid = 'p401';
+
+PLAYERID   NAME                 TOTALMATCHESPLAYED
+---------- -------------------- ------------------
+p401       pant                                  2
+
+SQL> CREATE OR REPLACE VIEW player_details_view AS
+  2  SELECT
+  3      playerid,
+  4      name,
+  5      age,
+  6      playingrole,
+  7      teamid,
+  8      TotalMatchesPlayed
+  9  FROM
+ 10      player
+ 11  ORDER BY
+ 12      teamid, playerid;
+ 13  /
+
+View created.
+
+SQL> SELECT * FROM player_details_view;
+
+PLAYERID   NAME                        AGE PLAYINGROL TEAMID     TOTALMATCHESPLAYED
+---------- -------------------- ---------- ---------- ---------- ------------------
+p101       arun                         34 batsman    t1                          2
+p102       vijay                        31 allrounder t1                          1
+p201       rohit                        35 batsman    t2                          2
+p202       jasprit                      28 bowler     t2                          1
+p203       arujun                       23 bowler     t2                          1
+p301       andre                        34 allrounder t3                          2
+p302       sunil                        34 bowler     t3                          1
+p401       pant                         25 wk         t4                          2
+p501       virat                        34 batsman    t5                          1
+p502       fauf                         38 batman     t5                          1
+
+10 rows selected.
+
+SQL> CREATE OR REPLACE PROCEDURE DeletePlayer (
+  2      p_playerid IN player.playerid%TYPE
+  3  )
+  4  AS
+  5      e_child_record_exists EXCEPTION;
+  6      PRAGMA EXCEPTION_INIT(e_child_record_exists, -2292);
+  7      v_player_name player.name%TYPE;
+  8  BEGIN
+  9      SELECT name INTO v_player_name FROM player WHERE playerid = p_playerid;
+ 10
+ 11      DELETE FROM player WHERE playerid = p_playerid;
+ 12
+ 13      DBMS_OUTPUT.PUT_LINE('Success: Player ' || v_player_name || ' (' || p_playerid || ') has been deleted.');
+ 14      COMMIT;
+ 15
+ 16  EXCEPTION
+ 17      WHEN NO_DATA_FOUND THEN
+ 18          DBMS_OUTPUT.PUT_LINE('Error: Player with ID ''' || p_playerid || ''' does not exist.');
+ 19          ROLLBACK;
+ 20      WHEN e_child_record_exists THEN
+ 21          DBMS_OUTPUT.PUT_LINE('Restriction Error: Cannot delete player ' || v_player_name || '. They have existing match records.');
+ 22          ROLLBACK;
+ 23      WHEN OTHERS THEN
+ 24          DBMS_OUTPUT.PUT_LINE('An unexpected error occurred: ' || SQLERRM);
+ 25          ROLLBACK;
+ 26  END DeletePlayer;
+ 27  /
+
+Procedure created.
+
+SQL> BEGIN
+  2      DeletePlayer('p101');
+  3  END;
+  4  /
+Restriction Error: Cannot delete player arun. They have existing match records.
+
+PL/SQL procedure successfully completed.
+
+SQL> BEGIN
+  2      DeletePlayer('p999');
+  3  END;
+  4  /
+Error: Player with ID 'p999' does not exist.
+
+PL/SQL procedure successfully completed.
+
+SQL> INSERT INTO player(playerid, name, age, teamid) VALUES ('p901', 'Test Player', 25, 't1');
+
+1 row created.
+
+SQL> BEGIN
+  2      DeletePlayer('p901');
+  3  END;
+  4  /
+Success: Player Test Player (p901) has been deleted.
+
+PL/SQL procedure successfully completed.
+
+SQL> BEGIN
+  2    GetEvenPlayerIDs;
+  3  END;
+  4  /
+--- Even-Numbered Player IDs ---
+Found Even PlayerID: p102
+Found Even PlayerID: p202
+Found Even PlayerID: p302
+Found Even PlayerID: p401
+Found Even PlayerID: p502
+--------------------------------
+
+PL/SQL procedure successfully completed.
