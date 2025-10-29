@@ -1,0 +1,124 @@
+test> use DBMS
+switched to db DBMS
+DBMS> db.createCollection("CricketBoard")
+{ ok: 1 }
+
+
+DBMS> db.CricketBoard.insertOne({BoardId:"BID01", Name:"Chennai cricket board", Address:"Chennai", Phone:9566903378});
+{
+  acknowledged: true,
+  insertedId: ObjectId('68ec92bd2feb6ed43bcebea4')
+}
+
+DBMS> db.CricketBoard.find().pretty()
+[
+  {
+    _id: ObjectId('68ec92bd2feb6ed43bcebea4'),
+    BoardId: 'BID01',
+    Name: 'Chennai cricket board',
+    Address: 'Chennai',
+    Phone: 9566903378
+  }
+]
+
+
+DBMS> db. CricketBoard. insertMany([{BoardId:"BID02", NamessssDBMS> db. CricketBoard. insertMany([{BoardId:"BID02", Name:"Tiruvallur cricket board", Address:"Chennai", Phone:9944332211},{BoardId:"BID03", Name:"Trichy cricket board", Address:"Trichy", Phone:9123456780},{BoardId:"BID04", Name:"Madurai cricket board", Address:"Madurai", Phone:9787238491}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('68ec98fb2feb6ed43bcebea5'),
+    '1': ObjectId('68ec98fb2feb6ed43bcebea6'),
+    '2': ObjectId('68ec98fb2feb6ed43bcebea7')
+  }
+}
+
+DBMS> db. CricketBoard.find()
+[
+  {
+    _id: ObjectId('68ec92bd2feb6ed43bcebea4'),
+    BoardId: 'BID01',
+    Name: 'Chennai cricket board',
+    Address: 'Chennai',
+    Phone: 9566903378
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea5'),
+    BoardId: 'BID02',
+    Name: 'Tiruvallur cricket board',
+    Address: 'Chennai',
+    Phone: 9944332211
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea6'),
+    BoardId: 'BID03',
+    Name: 'Trichy cricket board',
+    Address: 'Trichy',
+    Phone: 9123456780
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea7'),
+    BoardId: 'BID04',
+    Name: 'Madurai cricket board',
+    Address: 'Madurai',
+    Phone: 9787238491
+  }
+]
+DBMS> db. CricketBoard.find().pretty()
+[
+  {
+    _id: ObjectId('68ec92bd2feb6ed43bcebea4'),
+    BoardId: 'BID01',
+    Name: 'Chennai cricket board',
+    Address: 'Chennai',
+    Phone: 9566903378
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea5'),
+    BoardId: 'BID02',
+    Name: 'Tiruvallur cricket board',
+    Address: 'Chennai',
+    Phone: 9944332211
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea6'),
+    BoardId: 'BID03',
+    Name: 'Trichy cricket board',
+    Address: 'Trichy',
+    Phone: 9123456780
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea7'),
+    BoardId: 'BID04',
+    Name: 'Madurai cricket board',
+    Address: 'Madurai',
+    Phone: 9787238491
+  }
+]
+
+
+DBMS> db.CricketBoard.deleteOne({BoardId:"BID04"})
+{ acknowledged: true, deletedCount: 1 }
+DBMS> db. CricketBoard.find().pretty()
+[
+  {
+    _id: ObjectId('68ec92bd2feb6ed43bcebea4'),
+    BoardId: 'BID01',
+    Name: 'Chennai cricket board',
+    Address: 'Chennai',
+    Phone: 9566903378
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea5'),
+    BoardId: 'BID02',
+    Name: 'Tiruvallur cricket board',
+    Address: 'Chennai',
+    Phone: 9944332211
+  },
+  {
+    _id: ObjectId('68ec98fb2feb6ed43bcebea6'),
+    BoardId: 'BID03',
+    Name: 'Trichy cricket board',
+    Address: 'Trichy',
+    Phone: 9123456780
+  }
+]
