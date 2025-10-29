@@ -1,0 +1,254 @@
+SQL> ALTER TABLE team ADD (boardid VARCHAR(10));
+
+Table altered.
+
+SQL> ALTER TABLE team ADD CONSTRAINT fk_boardid FOREIGN KEY (boardid) REFERENCES cricketboard(boardid);
+
+Table altered.
+
+SQL> UPDATE team SET boardid = 'bid1' WHERE teamid = 't1';
+
+1 row updated.
+
+SQL> UPDATE team SET boardid = 'bid2' WHERE teamid = 't2';
+
+1 row updated.
+
+SQL> UPDATE team SET boardid = 'bid5' WHERE teamid = 't3';
+
+1 row updated.
+
+SQL> UPDATE team SET boardid = 'bid4' WHERE teamid = 't4';
+
+1 row updated.
+
+SQL> UPDATE team SET boardid = 'bid3' WHERE teamid = 't5';
+
+1 row updated.
+
+SQL> INSERT INTO match VALUES('m406',TO_DATE('15-05-2023','DD-MM-YYYY'),'19:30','Tie','grd04','t4','t5');
+
+1 row created.
+
+SQL> ALTER TABLE match ADD (match_type VARCHAR(10));
+
+Table altered.
+
+SQL> UPDATE match SET match_type = 'T20';
+
+6 rows updated.
+
+
+SQL> INSERT INTO player_match VALUES ('p101', 'm501');
+
+1 row created.
+
+SQL> SELECT t.teamid, t.name, t.coach, t.captain, (SELECT COUNT(*) FROM match m WHERE m.result = t.teamid || ' won') AS matches_won FROM team t;
+
+TEAMID     NAME
+---------- --------------------------------------------------
+COACH                                              CAPTAIN
+-------------------------------------------------- --------------------
+MATCHES_WON
+-----------
+t1         csk
+sanjay                                             dhoni
+          2
+
+t2         mi
+hari                                               rohit sharma
+          2
+
+TEAMID     NAME
+---------- --------------------------------------------------
+COACH                                              CAPTAIN
+-------------------------------------------------- --------------------
+MATCHES_WON
+-----------
+
+t3         kkr
+balu                                               iyer
+          1
+
+t4         dc
+pramith                                            pant
+
+TEAMID     NAME
+---------- --------------------------------------------------
+COACH                                              CAPTAIN
+-------------------------------------------------- --------------------
+MATCHES_WON
+-----------
+          0
+
+t5         rc
+keerthan                                           haaufen
+          1
+
+
+SQL> SELECT t.name, (SELECT COUNT(*) FROM match m WHERE m.result = 'Tie' AND (m.team1id = t.teamid OR m.team2id = t.teamid)) AS tied_matches FROM team t;
+
+NAME                                               TIED_MATCHES
+-------------------------------------------------- ------------
+csk                                                           0
+mi                                                            0
+kkr                                                           0
+dc                                                            1
+rc                                                            1
+
+SQL> SELECT * FROM player WHERE playerid IN (SELECT playerid FROM player_match GROUP BY playerid HAVING COUNT(matchid) = (SELECT MAX(COUNT(matchid)) FROM player_match GROUP BY playerid));
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID                                             BATTINGSTYLE
+-------------------------------------------------- --------------------
+BOWLINGSTYLE
+--------------------
+p101       arun                         34 15-MAY-88 batsman
+t1                                                 Right-Hand
+None
+
+
+
+SQL> INSERT INTO player_match VALUES ('p101', 'm401');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p201', 'm401');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p102', 'm402');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p202', 'm402');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p203', 'm402');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p301', 'm403');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p302', 'm403');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p401', 'm403');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p101', 'm404');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p501', 'm404');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p502', 'm404');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p201', 'm405');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p301', 'm405');
+
+1 row created.
+
+SQL> SELECT p.name, p.age, m.matchid, m.matchdate FROM player p JOIN player_match pm ON p.playerid = pm.playerid JOIN match m ON pm.matchid = m.matchid WHERE p.age < 30;
+
+NAME                        AGE MATCHID    MATCHDATE
+-------------------- ---------- ---------- ---------
+jasprit                      28 m402       25-APR-23
+arujun                       23 m402       25-APR-23
+pant                         25 m403       01-MAY-23
+
+SQL> SELECT * FROM player WHERE playerid IN (SELECT playerid FROM player_match) AND playerid NOT IN (SELECT pm.playerid FROM player_match pm JOIN match m ON pm.matchid = m.matchid WHERE m.match_type != 'T20');
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID                                             BATTINGSTYLE
+-------------------------------------------------- --------------------
+BOWLINGSTYLE
+--------------------
+p102       vijay                        31 26-JAN-91 allrounder
+t1                                                 Right-Hand
+Right-Hand
+
+p201       rohit                        35 30-APR-87 batsman
+t2                                                 Right-Hand
+Right-Hand
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID                                             BATTINGSTYLE
+-------------------------------------------------- --------------------
+BOWLINGSTYLE
+--------------------
+
+p202       jasprit                      28 06-DEC-93 bowler
+t2                                                 Right-Hand
+Right-Hand
+
+p203       arujun                       23 24-SEP-99 bowler
+t2                                                 Left-Hand
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID                                             BATTINGSTYLE
+-------------------------------------------------- --------------------
+BOWLINGSTYLE
+--------------------
+Left-Hand
+
+p301       andre                        34 24-SEP-98 allrounder
+t3                                                 Right-Hand
+Right-Hand
+
+p302       sunil                        34 26-MAY-98 bowler
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID                                             BATTINGSTYLE
+-------------------------------------------------- --------------------
+BOWLINGSTYLE
+--------------------
+t3                                                 Left-Hand
+Right-Hand
+
+p401       pant                         25 04-OCT-97 wk
+t4                                                 Left-Hand
+None
+
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID                                             BATTINGSTYLE
+-------------------------------------------------- --------------------
+BOWLINGSTYLE
+--------------------
+p501       virat                        34 04-OCT-97 batsman
+t5                                                 Right-Hand
+Right-Hand
+
+p502       fauf                         38 13-JUL-84 batman
+t5                                                 Right-Hand
+Right-Hand
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID                                             BATTINGSTYLE
+-------------------------------------------------- --------------------
+BOWLINGSTYLE
+--------------------
+
+
+9 rows selected.
+
