@@ -1,0 +1,642 @@
+SQL> create table cricketboard(boardid varchar(10) PRIMARY KEY,name VARCHAR(50),address VARCHAR(100),contactno VARCHAR(15));
+
+Table created.
+
+SQL> create table team(teamid VARCHAR(10) PRIMARY KEY,name VARCHAR(50),coach VARCHAR(50),captain varchar(20));
+
+Table created.
+
+SQL> create table player(playerid VARCHAR(10) PRIMARY KEY,name VARCHAR(20),age int,dateofbirth date,playingrole varchar(10),teamid varchar(50),FOREIGN KEY(teamid) REFERENCES team(teamid));
+
+Table created.
+
+SQL> create table ground(groundid VARCHAR(10) PRIMARY KEY,name VARCHAR(50),location VARCHAR(50),capacity INT);
+
+Table created.
+
+SQL> create table match(matchid VARCHAR(10) PRIMARY KEY,matchdate date,matchtime VARCHAR(10),result varchar(100),groundid varchar(10),team1id varchar(10),team2id varchar(10),FOREIGN KEY(team1id) REFERENCES team(teamid),FOREIGN KEY(team2id) REFERENCES team(teamid));
+
+Table created.
+
+SQL> create table umpire(umpireid VARCHAR(10) PRIMARY KEY,name varchar(30),age int,dateofbirth DATE,country varchar(50));
+
+Table created.
+
+SQL> insert into cricketboard values('&boardid','&name','&address','&contactno');
+Enter value for boardid: bid1
+Enter value for name: TNCA
+Enter value for address: chennai
+Enter value for contactno: 8888888888
+old   1: insert into cricketboard values('&boardid','&name','&address','&contactno')
+new   1: insert into cricketboard values('bid1','TNCA','chennai','8888888888')
+
+1 row created.
+
+SQL> /
+Enter value for boardid: bid2
+Enter value for name: MCA
+Enter value for address: mumbai
+Enter value for contactno: 333333333
+old   1: insert into cricketboard values('&boardid','&name','&address','&contactno')
+new   1: insert into cricketboard values('bid2','MCA','mumbai','333333333')
+
+1 row created.
+
+SQL> /
+Enter value for boardid: bid3
+Enter value for name: KSCA
+Enter value for address: bangolre
+Enter value for contactno: 4444444444
+old   1: insert into cricketboard values('&boardid','&name','&address','&contactno')
+new   1: insert into cricketboard values('bid3','KSCA','bangolre','4444444444')
+
+1 row created.
+
+SQL> /
+Enter value for boardid: bid4
+Enter value for name: DDCA
+Enter value for address: delhi
+Enter value for contactno: 5555555555
+old   1: insert into cricketboard values('&boardid','&name','&address','&contactno')
+new   1: insert into cricketboard values('bid4','DDCA','delhi','5555555555')
+
+1 row created.
+
+SQL> /
+Enter value for boardid: bid5
+Enter value for name: CAB
+Enter value for address: kolkata
+Enter value for contactno: 7777777777
+old   1: insert into cricketboard values('&boardid','&name','&address','&contactno')
+new   1: insert into cricketboard values('bid5','CAB','kolkata','7777777777')
+
+1 row created.
+
+SQL> insert into team values('&teamid','&name','&coach','&captain');
+Enter value for teamid: t1
+Enter value for name: csk
+Enter value for coach: sanjay
+Enter value for captain: dhoni
+old   1: insert into team values('&teamid','&name','&coach','&captain')
+new   1: insert into team values('t1','csk','sanjay','dhoni')
+
+1 row created.
+
+SQL> /
+Enter value for teamid: t2
+Enter value for name: mi
+Enter value for coach: hari
+Enter value for captain: rohit sharma
+old   1: insert into team values('&teamid','&name','&coach','&captain')
+new   1: insert into team values('t2','mi','hari','rohit sharma')
+
+1 row created.
+
+SQL> /
+Enter value for teamid: t3
+Enter value for name: kkr
+Enter value for coach: balu
+Enter value for captain: iyer
+old   1: insert into team values('&teamid','&name','&coach','&captain')
+new   1: insert into team values('t3','kkr','balu','iyer')
+
+1 row created.
+
+SQL> /
+Enter value for teamid: t4
+Enter value for name: dc
+Enter value for coach: pramith
+Enter value for captain: pant
+old   1: insert into team values('&teamid','&name','&coach','&captain')
+new   1: insert into team values('t4','dc','pramith','pant')
+
+1 row created.
+
+SQL> /
+Enter value for teamid: t5
+Enter value for name: rc
+Enter value for coach: keerthan
+Enter value for captain: haaufen
+old   1: insert into team values('&teamid','&name','&coach','&captain')
+new   1: insert into team values('t5','rc','keerthan','haaufen')
+
+1 row created.
+
+SQL> insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid');
+Enter value for playerid: p101
+Enter value for name: arun
+Enter value for age: 34
+Enter value for dateofbirth: 15-05-1988
+Enter value for playingrole: batsman
+Enter value for teamid: t1
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p101','arun','34',TO_DATE('15-05-1988','DD-MM-YYYY'),'batsman','t1')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p102
+Enter value for name: vijay
+Enter value for age: 31
+Enter value for dateofbirth: 26-01-1991
+Enter value for playingrole: allrounder
+Enter value for teamid: t1
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p102','vijay','31',TO_DATE('26-01-1991','DD-MM-YYYY'),'allrounder','t1')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p201
+Enter value for name: rohit
+Enter value for age: 35
+Enter value for dateofbirth: 30-04-1987
+Enter value for playingrole: batsman
+Enter value for teamid: t2
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p201','rohit','35',TO_DATE('30-04-1987','DD-MM-YYYY'),'batsman','t2')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p202
+Enter value for name: jasprit
+Enter value for age: 28
+Enter value for dateofbirth: 06-12-1993
+Enter value for playingrole: bowler
+Enter value for teamid: t2
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p202','jasprit','28',TO_DATE('06-12-1993','DD-MM-YYYY'),'bowler','t2')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p203
+Enter value for name: arujun
+Enter value for age: 23
+Enter value for dateofbirth: 24-09-1999
+Enter value for playingrole: bowler
+Enter value for teamid: t2
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p203','arujun','23',TO_DATE('24-09-1999','DD-MM-YYYY'),'bowler','t2')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p301
+Enter value for name: andre
+Enter value for age: 34
+Enter value for dateofbirth: 24-09-1998
+Enter value for playingrole: allrounder
+Enter value for teamid: t3
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p301','andre','34',TO_DATE('24-09-1998','DD-MM-YYYY'),'allrounder','t3')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p302
+Enter value for name: sunil
+Enter value for age: 34
+Enter value for dateofbirth: 26-05-1998
+Enter value for playingrole: bowler
+Enter value for teamid: t3
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p302','sunil','34',TO_DATE('26-05-1998','DD-MM-YYYY'),'bowler','t3')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p401
+Enter value for name: pant
+Enter value for age: 25
+Enter value for dateofbirth: 04-10-1997
+Enter value for playingrole: wk
+Enter value for teamid: t4
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p401','pant','25',TO_DATE('04-10-1997','DD-MM-YYYY'),'wk','t4')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p501
+Enter value for name: virat
+Enter value for age: 34
+Enter value for dateofbirth: 04-10-1997
+Enter value for playingrole: batsman
+Enter value for teamid: t5
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p501','virat','34',TO_DATE('04-10-1997','DD-MM-YYYY'),'batsman','t5')
+
+1 row created.
+
+SQL> /
+Enter value for playerid: p502
+Enter value for name: fauf
+Enter value for age: 38
+Enter value for dateofbirth: 13-07-1984
+Enter value for playingrole: batman
+Enter value for teamid: t5
+old   1: insert into player values('&playerid','&name','&age',TO_DATE('&dateofbirth','DD-MM-YYYY'),'&playingrole','&teamid')
+new   1: insert into player values('p502','fauf','38',TO_DATE('13-07-1984','DD-MM-YYYY'),'batman','t5')
+
+1 row created.
+
+SQL> insert into ground values('&groundid','&name','&location','&capacity');
+Enter value for groundid: grd01
+Enter value for name: chidambaram
+Enter value for location: chennai
+Enter value for capacity: 38000
+old   1: insert into ground values('&groundid','&name','&location','&capacity')
+new   1: insert into ground values('grd01','chidambaram','chennai','38000')
+
+1 row created.
+
+SQL> /
+Enter value for groundid: grd02
+Enter value for name: wankhede
+Enter value for location: mumbai
+Enter value for capacity: 33000
+old   1: insert into ground values('&groundid','&name','&location','&capacity')
+new   1: insert into ground values('grd02','wankhede','mumbai','33000')
+
+1 row created.
+
+SQL> /
+Enter value for groundid: grd03
+Enter value for name: eden
+Enter value for location: kolkata
+Enter value for capacity: 68000
+old   1: insert into ground values('&groundid','&name','&location','&capacity')
+new   1: insert into ground values('grd03','eden','kolkata','68000')
+
+1 row created.
+
+SQL> /
+Enter value for groundid: grd04
+Enter value for name: jaitley
+Enter value for location: delhi
+Enter value for capacity: 41800
+old   1: insert into ground values('&groundid','&name','&location','&capacity')
+new   1: insert into ground values('grd04','jaitley','delhi','41800')
+
+1 row created.
+
+SQL> /
+Enter value for groundid: grd05
+Enter value for name: chinnaswamy
+Enter value for location: banglore
+Enter value for capacity: 40000
+old   1: insert into ground values('&groundid','&name','&location','&capacity')
+new   1: insert into ground values('grd05','chinnaswamy','banglore','40000')
+
+1 row created.
+
+SQL> insert into match values('&matchid',TO_DATE('&matchdate','DD-MM-YYYY'),'&matchtime','&result','&groundid','&team1id','&team2id');
+Enter value for matchid: m401
+Enter value for matchdate: 20-04-2023
+Enter value for matchtime: 19:30
+Enter value for result: t1 won
+Enter value for groundid: grd01
+Enter value for team1id: t1
+Enter value for team2id: t2
+old   1: insert into match values('&matchid',TO_DATE('&matchdate','DD-MM-YYYY'),'&matchtime','&result','&groundid','&team1id','&team2id')
+new   1: insert into match values('m401',TO_DATE('20-04-2023','DD-MM-YYYY'),'19:30','t1 won','grd01','t1','t2')
+
+1 row created.
+
+SQL> /
+Enter value for matchid: m402
+Enter value for matchdate: 25-04-2023
+Enter value for matchtime: 19:30
+Enter value for result: t2 won
+Enter value for groundid: grd02
+Enter value for team1id: t2
+Enter value for team2id: t1
+old   1: insert into match values('&matchid',TO_DATE('&matchdate','DD-MM-YYYY'),'&matchtime','&result','&groundid','&team1id','&team2id')
+new   1: insert into match values('m402',TO_DATE('25-04-2023','DD-MM-YYYY'),'19:30','t2 won','grd02','t2','t1')
+
+1 row created.
+
+SQL> /
+Enter value for matchid: m403
+Enter value for matchdate: 01-05-2023
+Enter value for matchtime: 15:30
+Enter value for result: t3 won
+Enter value for groundid: grd03
+Enter value for team1id: t3
+Enter value for team2id: t4
+old   1: insert into match values('&matchid',TO_DATE('&matchdate','DD-MM-YYYY'),'&matchtime','&result','&groundid','&team1id','&team2id')
+new   1: insert into match values('m403',TO_DATE('01-05-2023','DD-MM-YYYY'),'15:30','t3 won','grd03','t3','t4')
+
+1 row created.
+
+SQL> /
+Enter value for matchid: m404
+Enter value for matchdate: 05-05-2023
+Enter value for matchtime: 19:30
+Enter value for result: t5 won
+Enter value for groundid: grd05
+Enter value for team1id: t5
+Enter value for team2id: t1
+old   1: insert into match values('&matchid',TO_DATE('&matchdate','DD-MM-YYYY'),'&matchtime','&result','&groundid','&team1id','&team2id')
+new   1: insert into match values('m404',TO_DATE('05-05-2023','DD-MM-YYYY'),'19:30','t5 won','grd05','t5','t1')
+
+1 row created.
+
+SQL> /
+Enter value for matchid: m405
+Enter value for matchdate: 10-05-2023
+Enter value for matchtime: 19:30
+Enter value for result: t2 won
+Enter value for groundid: grd02
+Enter value for team1id: t2
+Enter value for team2id: t3
+old   1: insert into match values('&matchid',TO_DATE('&matchdate','DD-MM-YYYY'),'&matchtime','&result','&groundid','&team1id','&team2id')
+new   1: insert into match values('m405',TO_DATE('10-05-2023','DD-MM-YYYY'),'19:30','t2 won','grd02','t2','t3')
+
+1 row created.
+
+SQL> insert into umpire values('&umpireid','&name',&age,TO_DATE('&dateofbirth','DD-MM-YYYY'),'&country');
+Enter value for umpireid: ump01
+Enter value for name: nitin
+Enter value for age: 39
+Enter value for dateofbirth: 02-11-1983
+Enter value for country: india
+old   1: insert into umpire values('&umpireid','&name',&age,TO_DATE('&dateofbirth','DD-MM-YYYY'),'&country')
+new   1: insert into umpire values('ump01','nitin',39,TO_DATE('02-11-1983','DD-MM-YYYY'),'india')
+
+1 row created.
+
+SQL> /
+Enter value for umpireid: ump02
+Enter value for name: anil
+Enter value for age: 57
+Enter value for dateofbirth: 12-03-1965
+Enter value for country: india
+old   1: insert into umpire values('&umpireid','&name',&age,TO_DATE('&dateofbirth','DD-MM-YYYY'),'&country')
+new   1: insert into umpire values('ump02','anil',57,TO_DATE('12-03-1965','DD-MM-YYYY'),'india')
+
+1 row created.
+
+SQL> /
+Enter value for umpireid: ump03
+Enter value for name: dharmasena
+Enter value for age: 51
+Enter value for dateofbirth: 24-04-1971
+Enter value for country: sri lanka
+old   1: insert into umpire values('&umpireid','&name',&age,TO_DATE('&dateofbirth','DD-MM-YYYY'),'&country')
+new   1: insert into umpire values('ump03','dharmasena',51,TO_DATE('24-04-1971','DD-MM-YYYY'),'sri lanka')
+
+1 row created.
+
+SQL> /
+Enter value for umpireid: ump04
+Enter value for name: erasmus
+Enter value for age: 58
+Enter value for dateofbirth: 27-02-1964
+Enter value for country: south africa
+old   1: insert into umpire values('&umpireid','&name',&age,TO_DATE('&dateofbirth','DD-MM-YYYY'),'&country')
+new   1: insert into umpire values('ump04','erasmus',58,TO_DATE('27-02-1964','DD-MM-YYYY'),'south africa')
+
+1 row created.
+
+SQL> /
+Enter value for umpireid: ump05
+Enter value for name: ravi
+Enter value for age: 56
+Enter value for dateofbirth: 22-04-1966
+Enter value for country: india
+old   1: insert into umpire values('&umpireid','&name',&age,TO_DATE('&dateofbirth','DD-MM-YYYY'),'&country')
+new   1: insert into umpire values('ump05','ravi',56,TO_DATE('22-04-1966','DD-MM-YYYY'),'india')
+
+1 row created.
+
+SQL> select g.location from ground g join match m on g.groundid=m.groundid where m.matchid='m401';
+
+LOCATION
+--------------------------------------------------
+chennai
+
+SQL> select * from player where name like 'a%';
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL
+---------- -------------------- ---------- --------- ----------
+TEAMID
+--------------------------------------------------
+p101       arun                         34 15-MAY-88 batsman
+t1
+
+p203       arujun                       23 24-SEP-99 bowler
+t2
+
+p301       andre                        34 24-SEP-98 allrounder
+t3
+
+SQL> alter table player add(battingstyle varchar(20),bowlingstyle varchar(20));
+
+Table altered.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'None' WHERE playerid = 'p101';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p102';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p201';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p201';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p202';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Left-Hand', bowlingstyle = 'Left-Hand' WHERE playerid = 'p203';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p301';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Left-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p302';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Left-Hand', bowlingstyle = 'None' WHERE playerid = 'p401';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p501';
+
+1 row updated.
+
+SQL> UPDATE player SET battingstyle = 'Right-Hand', bowlingstyle = 'Right-Hand' WHERE playerid = 'p502';
+
+1 row updated.
+
+SQL> select count(*) as number_of_righthand_batsman from player where battingstyle = 'Right-Hand' and teamid='t1';
+
+NUMBER_OF_RIGHTHAND_BATSMAN
+---------------------------
+                          2
+
+SQL> select * from cricketboard where boardid in ('bid1','bid3','bid6');
+
+BOARDID    NAME
+---------- --------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+CONTACTNO
+---------------
+bid1       TNCA
+chennai
+8888888888
+
+bid3       KSCA
+bangolre
+4444444444
+
+BOARDID    NAME
+---------- --------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+CONTACTNO
+---------------
+
+
+SQL> select playerid,name from player where bowlingstyle='Left-Hand';
+
+PLAYERID   NAME
+---------- --------------------
+p203       arujun
+
+SQL> create table player_match(playerid varchar(10),matchid varchar(10),PRIMARY KEY(playerid,matchid),FOREIGN KEY(playerid) REFERENCES player(playerid),FOREIGN KEY(matchid) REFERENCES match(matchid));
+
+Table created.
+
+SQL> create table match_umpire(matchid varchar(10),umpireid varchar(10),PRIMARY KEY(matchid,umpireid),FOREIGN KEY(matchid) REFERENCES match(matchid),FOREIGN KEY(umpireid) REFERENCES umpire(umpireid));
+
+Table created.
+
+SQL> INSERT INTO player_match VALUES ('p101', 'm401');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p201', 'm401');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p202', 'm402');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p203', 'm402');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p102', 'm402');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p301', 'm403');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p302', 'm403');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p401', 'm403');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p501', 'm404');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p502', 'm404');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p101', 'm404');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p201', 'm405');
+
+1 row created.
+
+SQL> INSERT INTO player_match VALUES ('p301', 'm405');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m401', 'ump01');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m401', 'ump02');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m402', 'ump03');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m402', 'ump04');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m403', 'ump01');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m403', 'ump03');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m404', 'ump02');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m404', 'ump04');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m405', 'ump01');
+
+1 row created.
+
+SQL> INSERT INTO match_umpire VALUES ('m405', 'ump04');
+
+1 row created.
+
+
+SQL> SELECT umpireid FROM umpire WHERE umpireid NOT IN (SELECT umpireid FROM match_umpire);
+
+UMPIREID
+----------
+ump05
+
+SQL>    SELECT playerid, COUNT(matchid) FROM player_match GROUP BY playerid;
+
+PLAYERID   COUNT(MATCHID)
+---------- --------------
+p101                    2
+p102                    1
+p201                    2
+p202                    1
+p203                    1
+p301                    2
+p302                    1
+p401                    1
+p501                    1
+p502                    1
+
+10 rows selected.
