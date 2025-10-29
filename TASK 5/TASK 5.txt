@@ -1,0 +1,115 @@
+SQL> SELECT c.name AS cricketboard_name, t.name AS team_name FROM cricketboard c JOIN team t ON c.boardid = t.boardid;
+
+CRICKETBOARD_NAME
+--------------------------------------------------
+TEAM_NAME
+--------------------------------------------------
+TNCA
+csk
+
+MCA
+mi
+
+CAB
+kkr
+
+
+CRICKETBOARD_NAME
+--------------------------------------------------
+TEAM_NAME
+--------------------------------------------------
+DDCA
+dc
+
+KSCA
+rc
+
+
+SQL> SELECT m.matchid, t1.name AS team1, t1.captain AS team1_captain, t2.name AS team2, t2.captain AS team2_captain FROM match m JOIN team t1 ON m.team1id = t1.teamid JOIN team t2 ON m.team2id = t2.teamid;
+
+MATCHID    TEAM1
+---------- --------------------------------------------------
+TEAM1_CAPTAIN        TEAM2
+-------------------- --------------------------------------------------
+TEAM2_CAPTAIN
+--------------------
+m404       rc
+haaufen              csk
+dhoni
+
+m402       mi
+rohit sharma         csk
+dhoni
+
+MATCHID    TEAM1
+---------- --------------------------------------------------
+TEAM1_CAPTAIN        TEAM2
+-------------------- --------------------------------------------------
+TEAM2_CAPTAIN
+--------------------
+
+m401       csk
+dhoni                mi
+rohit sharma
+
+m501       csk
+dhoni                mi
+
+MATCHID    TEAM1
+---------- --------------------------------------------------
+TEAM1_CAPTAIN        TEAM2
+-------------------- --------------------------------------------------
+TEAM2_CAPTAIN
+--------------------
+rohit sharma
+
+m405       mi
+rohit sharma         kkr
+iyer
+
+m403       kkr
+
+MATCHID    TEAM1
+---------- --------------------------------------------------
+TEAM1_CAPTAIN        TEAM2
+-------------------- --------------------------------------------------
+TEAM2_CAPTAIN
+--------------------
+iyer                 dc
+pant
+
+m406       dc
+pant                 rc
+haaufen
+
+
+7 rows selected.
+
+SQL> SELECT t.name, (SELECT COUNT(*) FROM match WHERE team1id = t.teamid) + (SELECT COUNT(*) FROM match WHERE team2id = t.teamid) AS matches_played FROM team t;
+
+NAME                                               MATCHES_PLAYED
+-------------------------------------------------- --------------
+csk                                                             4
+mi                                                              4
+kkr                                                             2
+dc                                                              2
+rc                                                              2
+
+SQL> SELECT p.playerid, p.name, p.playingrole FROM player p JOIN team t ON p.teamid = t.teamid WHERE t.name = 'Nellai Royal Kings';
+
+no rows selected
+
+SQL> SELECT m.matchid, m.matchdate, m.result FROM match m JOIN player_match pm ON m.matchid = pm.matchid WHERE pm.playerid = 'p101';
+
+MATCHID    MATCHDATE
+---------- ---------
+RESULT
+--------------------------------------------------------------------------------
+m401       20-APR-23
+t1 won
+
+m404       05-MAY-23
+t5 won
+
+m501       01-JUN-23
+t1 won
