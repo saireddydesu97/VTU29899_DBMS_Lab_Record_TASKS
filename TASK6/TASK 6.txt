@@ -1,0 +1,147 @@
+SQL> SET SERVEROUTPUT ON;
+
+
+SQL> DECLARE
+  2      v_total_age   NUMBER := 0;
+  3      v_num_players NUMBER := 0;
+  4      v_avg_age     NUMBER(5, 2) := 0;
+  5  BEGIN
+  6      FOR player_rec IN (SELECT age FROM Player) LOOP
+  7          v_total_age := v_total_age + player_rec.age;
+  8          v_num_players := v_num_players + 1;
+  9      END LOOP;
+ 10
+ 11      IF v_num_players > 0 THEN
+ 12          v_avg_age := v_total_age / v_num_players;
+ 13      END IF;
+ 14
+ 15      DBMS_OUTPUT.PUT_LINE('--- Average Player Age Calculation ---');
+ 16      DBMS_OUTPUT.PUT_LINE('Total Number of Players: ' || v_num_players);
+ 17      DBMS_OUTPUT.PUT_LINE('Sum of all Player Ages: ' || v_total_age);
+ 18      DBMS_OUTPUT.PUT_LINE('Average Player Age: ' || v_avg_age);
+ 19      DBMS_OUTPUT.PUT_LINE('------------------------------------');
+ 20  END;
+ 21  /
+--- Average Player Age Calculation ---
+Total Number of Players: 10
+Sum of all Player Ages: 316
+Average Player Age: 31.6
+------------------------------------
+
+PL/SQL procedure successfully completed.
+
+SQL> CREATE OR REPLACE PROCEDURE AddNewPlayer (
+  2      p_playerid    IN player.playerid%TYPE,
+  3      p_name        IN player.name%TYPE,
+  4      p_age         IN player.age%TYPE,
+  5      p_dob         IN player.dateofbirth%TYPE,
+  6      p_playingrole IN player.playingrole%TYPE,
+  7      p_teamid      IN player.teamid%TYPE,
+  8      p_batting     IN player.battingstyle%TYPE,
+  9      p_bowling     IN player.bowlingstyle%TYPE
+ 10  )
+ 11  AS
+ 12  BEGIN
+ 13      INSERT INTO player (playerid, name, age, dateofbirth, playingrole, teamid, battingstyle, bowlingstyle)
+ 14      VALUES (p_playerid, p_name, p_age, p_dob, p_playingrole, p_teamid, p_batting, p_bowling);
+ 15      DBMS_OUTPUT.PUT_LINE('Successfully added new player: ' || p_name || ' with ID: ' || p_playerid);
+ 16      COMMIT;
+ 17  EXCEPTION
+ 18      WHEN DUP_VAL_ON_INDEX THEN
+ 19          DBMS_OUTPUT.PUT_LINE('Error: Player ID ' || p_playerid || ' already exists.');
+ 20          ROLLBACK;
+ 21      WHEN OTHERS THEN
+ 22          DBMS_OUTPUT.PUT_LINE('An unexpected error occurred: ' || SQLERRM);
+ 23          ROLLBACK;
+ 24  END AddNewPlayer;
+ 25  /
+
+Procedure created.
+
+SQL> BEGIN
+  2      AddNewPlayer(
+  3          p_playerid    => 'p103',
+  4          p_name        => 'Suresh',
+  5          p_age         => 35,
+  6          p_dob         => TO_DATE('27-05-1986', 'DD-MM-YYYY'),
+  7          p_playingrole => 'batsman',
+  8          p_teamid      => 't1',
+  9          p_batting     => 'Left-Hand',
+ 10          p_bowling     => 'None'
+ 11      );
+ 12  END;
+ 13  /
+Successfully added new player: Suresh with ID: p103
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM player WHERE playerid = 'p103';
+
+PLAYERID   NAME                        AGE DATEOFBIR PLAYINGROL TEAMID     BATTINGSTYLE         BOWLINGSTYLE
+---------- -------------------- ---------- --------- ---------- ---------- -------------------- --------------------
+p103       Suresh                       35 27-MAY-86 batsman    t1         Left-Hand            None
+
+
+SQL> CREATE OR REPLACE FUNCTION GetPlayerMatchCount (
+  2      p_playerid IN player.playerid%TYPE
+  3  )
+  4  RETURN NUMBER
+  5  AS
+  6      v_match_count NUMBER;
+  7  BEGIN
+  8      SELECT COUNT(matchid)
+  9      INTO v_match_count
+ 10      FROM player_match
+ 11      WHERE playerid = p_playerid;
+ 12      RETURN v_match_count;
+ 13  END GetPlayerMatchCount;
+ 14  /
+
+Function created.
+
+SQL> SELECT playerid, name, GetPlayerMatchCount(playerid) AS matches_played FROM player WHERE playerid = 'p101';
+
+PLAYERID   NAME                 MATCHES_PLAYED
+---------- -------------------- --------------
+p101       arun                              2
+
+SQL> DECLARE
+  2      v_count NUMBER;
+  3  BEGIN
+  4      v_count := GetPlayerMatchCount('p301');
+  5      DBMS_OUTPUT.PUT_LINE('Player p301 has played ' || v_count || ' matches.');
+  6  END;
+  7  /
+Player p301 has played 2 matches.
+
+PL/SQL procedure successfully completed.
+
+SQL> CREATE OR REPLACE PROCEDURE GetEvenPlayerIDs
+  2  AS
+  3      v_player_id_num NUMBER;
+  4  BEGIN
+  5      DBMS_OUTPUT.PUT_LINE('--- Even-Numbered Player IDs ---');
+  6      FOR rec IN (SELECT DISTINCT playerid FROM player_match ORDER BY playerid) LOOP
+  7          v_player_id_num := TO_NUMBER(SUBSTR(rec.playerid, 2));
+  8          IF MOD(v_player_id_num, 2) = 0 THEN
+  9              DBMS_OUTPUT.PUT_LINE('Found Even PlayerID: ' || rec.playerid);
+ 10          END IF;
+ 11      END LOOP;
+ 12      DBMS_OUTPUT.PUT_LINE('--------------------------------');
+ 13  END GetEvenPlayerIDs;
+ 14  /
+
+Procedure created.
+
+SQL> BEGIN
+  2    GetEvenPlayerIDs;
+  3  END;
+  4  /
+--- Even-Numbered Player IDs ---
+Found Even PlayerID: p102
+Found Even PlayerID: p202
+Found Even PlayerID: p302
+Found Even PlayerID: p502
+--------------------------------
+
+PL/SQL procedure successfully completed.
